@@ -214,7 +214,22 @@ extension ImageGalleryView: UICollectionViewDelegate {
             cell.selectedImageView.image = nil
         }) 
         self.selectedStack.dropAsset(asset)
-      } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
+        return
+      }
+      if self.imageLimit > 0 && self.imageLimit == self.selectedStack.assets.count {
+        if let last = self.selectedStack.assets.first, item = self.assets.indexOf(last) {
+          let ip = NSIndexPath(forItem: item, inSection: 0)
+          if let c = collectionView.cellForItemAtIndexPath(ip) as? ImageGalleryViewCell {
+            UIView.animateWithDuration(0.2, animations: {
+              c.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+            }) { _ in
+              c.selectedImageView.image = nil
+            }
+          }
+          self.selectedStack.dropAsset(last)
+        }
+      }
+      if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
         cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
         cell.selectedImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
         UIView.animate(withDuration: 0.2, animations: { _ in

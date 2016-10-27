@@ -217,11 +217,11 @@ extension ImageGalleryView: UICollectionViewDelegate {
         return
       }
       if self.imageLimit > 0 && self.imageLimit == self.selectedStack.assets.count {
-        if let last = self.selectedStack.assets.first, item = self.assets.indexOf(last) {
-          let ip = NSIndexPath(forItem: item, inSection: 0)
-          if let c = collectionView.cellForItemAtIndexPath(ip) as? ImageGalleryViewCell {
-            UIView.animateWithDuration(0.2, animations: {
-              c.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+        if let last = self.selectedStack.assets.first, let item = self.assets.index(of: last) {
+          let ip = IndexPath(row: item, section: 0)
+          if let c = collectionView.cellForItem(at: ip) as? ImageGalleryViewCell {
+            UIView.animate(withDuration: 0.2, animations: {
+              c.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
             }) { _ in
               c.selectedImageView.image = nil
             }
